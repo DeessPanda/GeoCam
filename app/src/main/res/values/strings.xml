@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">GeoCam</string>
     <string name="status_gps_off">GPS: OFF</string>
     <string name="status_gps_searching">GPS: SEARCHING</string>
     <string name="status_gps_locked">GPS: LOCKED</string>
@@ -30,6 +29,13 @@
     <string name="location_refreshing">Refreshing location</string>
     <string name="settings_gps_disabled">Enable location stamping in Settings first</string>
     <string name="map_zoom_level">Mini-map zoom level %1$d of 3</string>
+
+    <!-- Content descriptions for icon-only buttons (accessibility) -->
+    <string name="cd_capture_photo">Take photo</string>
+    <string name="cd_toggle_flash">Toggle flash</string>
+    <string name="cd_flip_camera">Switch between front and back camera</string>
+    <string name="cd_open_settings">Open settings</string>
+    <string name="cd_photo_info">Show photo details</string>
 
     <string name="settings_section_location">Location</string>
     <string name="settings_gps_enabled">Stamp GPS data on photos</string>

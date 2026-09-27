@@ -289,17 +289,35 @@ class MainActivity : AppCompatActivity() {
 
     private fun dp(value: Int): Int = (value * resources.displayMetrics.density).toInt()
     
+    /**
+     * Maps a raw sensor orientation (0..359) onto the rotation used by the on-screen
+     * controls and by saved photos.
+     *
+     * The rotation only changes once the device has travelled a full quarter turn away
+     * from the rotation currently in effect, in either direction. So while the app sits
+     * at 90 it stays at 90 through 80, 45 and 10, and only becomes upright when the
+     * device reaches 0 (or carries on past it). The same rule applies rotating the other
+     * way, which is why a tilt of 50 or 60 degrees leaves everything upright instead of
+     * flipping it to landscape.
+     *
+     * The wide dead band around [current] also means a hand held steady at a quarter
+     * turn cannot flicker, since small sensor wobble never travels far enough.
+     */
+    private fun snapOrientation(orientation: Int, current: Int): Int {
+        val travel = ((orientation - current + 180) % 360 + 360) % 360 - 180
+        return when {
+            travel >= 90 -> (current + 90) % 360
+            travel <= -90 -> (current - 90 + 360) % 360
+            else -> current
+        }
+    }
+
     private fun setupOrientationListener() {
         orientationEventListener = object : OrientationEventListener(this) {
             override fun onOrientationChanged(orientation: Int) {
                 if (orientation == ORIENTATION_UNKNOWN) return
-                
-                val rot = when (orientation) {
-                    in 45..134 -> 90 // Reverse Landscape
-                    in 135..224 -> 180 // Reverse Portrait
-                    in 225..314 -> 270 // Landscape
-                    else -> 0 // Portrait
-                }
+
+                val rot = snapOrientation(orientation, currentLiveRotation)
                 
                 if (currentLiveRotation != rot) {
                     currentLiveRotation = rot

@@ -1,5 +1,6 @@
 package dev.geocam.app.geocoding
 
+import dev.geocam.app.AppInfo
 import android.content.Context
 import android.location.Geocoder
 import android.os.Build
@@ -154,7 +155,7 @@ class GeocoderHelper(context: Context) {
                 requestMethod = "GET"
                 connectTimeout = NOMINATIM_CONNECT_TIMEOUT_MS
                 readTimeout = NOMINATIM_READ_TIMEOUT_MS
-                setRequestProperty("User-Agent", "GeoCam/1.0")
+                setRequestProperty("User-Agent", AppInfo.contactUserAgent)
                 setRequestProperty("Accept-Language", Locale.getDefault().toLanguageTag())
             }
 

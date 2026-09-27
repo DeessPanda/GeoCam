@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Overrides for the FLOSS flavor. Gradle merges this over src/main/res, so only the
+  strings that genuinely differ need to be repeated here.
+-->
+<resources>
+    <string name="settings_mini_map_hint">Fetches one map tile per photo from OpenStreetMap. Needs a network connection.</string>
+</resources>

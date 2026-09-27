@@ -32,6 +32,7 @@
 
     <ImageButton
         android:id="@+id/infoButton"
+        android:contentDescription="@string/cd_photo_info"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"
@@ -56,6 +57,7 @@
 
     <ImageButton
         android:id="@+id/shareButton"
+        android:contentDescription="@string/share_photo"
         android:layout_width="48dp"
         android:layout_height="48dp"
         android:layout_margin="16dp"

@@ -66,6 +66,7 @@
 
         <ImageButton
             android:id="@+id/settingsButton"
+        android:contentDescription="@string/cd_open_settings"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
@@ -101,6 +102,7 @@
             
         <ImageButton
             android:id="@+id/flashButton"
+        android:contentDescription="@string/cd_toggle_flash"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
@@ -128,6 +130,7 @@
         <!-- Flip Camera -->
         <ImageButton
             android:id="@+id/flipButton"
+        android:contentDescription="@string/cd_flip_camera"
             android:layout_width="48dp"
             android:layout_height="48dp"
             android:layout_marginEnd="32dp"
@@ -141,6 +144,7 @@
         <!-- Capture Button -->
         <ImageButton
             android:id="@+id/captureButton"
+        android:contentDescription="@string/cd_capture_photo"
             android:layout_width="84dp"
             android:layout_height="84dp"
             android:background="@drawable/bg_circle_white"

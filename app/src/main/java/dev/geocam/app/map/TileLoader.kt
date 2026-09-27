@@ -40,10 +40,19 @@ class TileLoader(context: Context) {
     }
     private val pendingFetches = ConcurrentHashMap<String, Boolean>()
 
+    // Provided by the product flavor: Google tiles for google, OpenStreetMap for floss.
+    private val source: TileSource = TileSourceFactory.create()
+
+    /** Satellite is silently downgraded to street style when the source has no aerial layer. */
+    private fun effectiveSatellite(satellite: Boolean): Boolean =
+        satellite && source.supportsSatellite
+
     private fun getCacheKey(zoom: Int, x: Int, y: Int, satellite: Boolean) = "${if (satellite) 's' else 'r'}_${zoom}_${x}_${y}"
 
     fun getTileAsync(lat: Double, lon: Double, zoom: Int = DEFAULT_ZOOM, satellite: Boolean = false, onTileLoaded: ((Bitmap?) -> Unit)? = null): Bitmap? {
         if (isClosed) return null
+        val satellite = effectiveSatellite(satellite)
+        val zoom = zoom.coerceIn(MIN_ZOOM, source.maxZoom)
         val key = centeredKey(lat, lon, zoom, satellite)
         centeredCache.get(key)?.let { return it }
         if (onTileLoaded != null && pendingFetches.putIfAbsent(key, true) == null) {
@@ -63,7 +72,9 @@ class TileLoader(context: Context) {
     }
 
     fun getCachedTile(lat: Double, lon: Double, zoom: Int = DEFAULT_ZOOM, satellite: Boolean = false): Bitmap? =
-        centeredCache.get(centeredKey(lat, lon, zoom, satellite))?.takeUnless { it.isRecycled }
+        centeredCache.get(
+            centeredKey(lat, lon, zoom.coerceIn(MIN_ZOOM, source.maxZoom), effectiveSatellite(satellite))
+        )?.takeUnless { it.isRecycled }
 
     fun shutdown() {
         isClosed = true
@@ -125,7 +136,7 @@ class TileLoader(context: Context) {
                 cacheFile.delete()
             }
         }
-        val bitmap = fetchTileGoogle(zoom, x, y, satellite) ?: return null
+        val bitmap = fetchTile(zoom, x, y, satellite) ?: return null
         try {
             FileOutputStream(cacheFile).use {
                 check(bitmap.compress(Bitmap.CompressFormat.PNG, 100, it)) { "Tile compression failed" }
@@ -139,9 +150,8 @@ class TileLoader(context: Context) {
         return bitmap
     }
 
-    private fun fetchTileGoogle(zoom: Int, x: Int, y: Int, satellite: Boolean = false): Bitmap? {
-        val lyr = if (satellite) "s" else "m"
-        val urlStr = "https://mt1.google.com/vt/lyrs=$lyr&x=$x&y=$y&z=$zoom"
+    private fun fetchTile(zoom: Int, x: Int, y: Int, satellite: Boolean = false): Bitmap? {
+        val urlStr = source.urlFor(zoom, x, y, effectiveSatellite(satellite))
         return downloadTile(urlStr)
     }
 
@@ -153,7 +163,7 @@ class TileLoader(context: Context) {
                 requestMethod = "GET"
                 connectTimeout = CONNECT_TIMEOUT_MS
                 readTimeout = READ_TIMEOUT_MS
-                setRequestProperty("User-Agent", "GeoCam/1.0")
+                setRequestProperty("User-Agent", source.userAgent)
             }
             if (connection.responseCode != 200) null
             else connection.inputStream.use { BitmapFactory.decodeStream(it) }
@@ -179,6 +189,7 @@ class TileLoader(context: Context) {
     companion object {
         private const val TAG = "TileLoader"
         private const val DEFAULT_ZOOM = 17
+        private const val MIN_ZOOM = 1
         private const val TILE_SIZE = 256
         private const val OUTPUT_SIZE = 256
         private const val MAX_MERCATOR_LAT = 85.05112878

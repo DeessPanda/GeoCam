@@ -1,5 +1,6 @@
 package dev.geocam.app.overlay
 
+import dev.geocam.app.map.MAP_ATTRIBUTION
 import android.graphics.Bitmap
 import android.graphics.Canvas
 import android.graphics.Color
@@ -176,8 +177,14 @@ object OverlayRenderer {
                 headingDegrees?.let { drawHeadingCone(canvas, mapRect.centerX(), mapRect.centerY(), mapSize, it) }
                 drawPin(canvas, mapRect.centerX(), mapRect.centerY(), shortEdge)
             }
-            // Update attribution to reflect Google Maps service
-            canvas.drawText("© Google Maps", mapLeft, mapTop + mapSize + attributionPaint.textSize + padding * 0.15f, attributionPaint)
+            // Credit line for whichever tile source this build uses. The OpenStreetMap
+            // variant is required by the ODbL, the Google one is required by its terms.
+            canvas.drawText(
+                MAP_ATTRIBUTION,
+                mapLeft,
+                mapTop + mapSize + attributionPaint.textSize + padding * 0.15f,
+                attributionPaint
+            )
         }
 
         // Text

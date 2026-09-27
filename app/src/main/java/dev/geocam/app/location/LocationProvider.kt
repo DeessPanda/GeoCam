@@ -9,18 +9,15 @@ import android.os.Bundle
 import android.os.Looper
 import android.util.Log
 import androidx.core.content.getSystemService
-import com.google.android.gms.location.LocationCallback
-import com.google.android.gms.location.LocationRequest
-import com.google.android.gms.location.LocationResult
-import com.google.android.gms.location.LocationServices
-import com.google.android.gms.location.Priority
 
 class LocationProvider(private val context: Context) {
 
     enum class Status { OFF, SEARCHING, LOCKED }
 
     private val lm: LocationManager? = context.getSystemService()
-    private val fusedClient by lazy { LocationServices.getFusedLocationProviderClient(context.applicationContext) }
+
+    // Provided by the product flavor: Play fused location for google, a no-op for floss.
+    private val fused: FusedLocationBridge = DefaultFusedLocationBridgeFactory.create(context)
 
     var status: Status = Status.OFF
         private set
@@ -32,19 +29,7 @@ class LocationProvider(private val context: Context) {
         private set
 
     private var isRunning = false
-    private var fusedUpdatesRequested = false
     private var bypassCachedLocationOnce = false
-
-    private val fusedCallback = object : LocationCallback() {
-        override fun onLocationResult(result: LocationResult) {
-            result.locations.forEach { location ->
-                val current = currentSnapshot
-                if (current == null || !current.isValid || location.time >= current.fixTimeMs || location.accuracy < current.accuracy) {
-                    updateSnapshot(location)
-                }
-            }
-        }
-    }
 
     private val gpsListener = object : LocationListener {
         override fun onLocationChanged(location: Location) {
@@ -77,43 +62,41 @@ class LocationProvider(private val context: Context) {
         override fun onProviderDisabled(provider: String) {}
     }
 
+    /**
+     * Begins location updates.
+     *
+     * Called from the main thread, and the platform has been observed to throw
+     * unexpected exceptions from several of the calls below on some OEM builds. A
+     * failure to acquire location must never take the app down, so anything that
+     * escapes the individual guards is caught here and the app simply keeps
+     * whatever it managed to register.
+     */
     @SuppressLint("MissingPermission")
     fun start() {
         if (isRunning) return
         val manager = lm ?: return
+        try {
+            startUpdates(manager)
+        } catch (e: Exception) {
+            Log.e(TAG, "Location updates could not be started; continuing without a fix", e)
+            setStatus(if (currentSnapshot?.isValid == true) Status.LOCKED else Status.SEARCHING)
+        }
+    }
 
+    @SuppressLint("MissingPermission")
+    private fun startUpdates(manager: LocationManager) {
         isRunning = true
         setStatus(Status.SEARCHING)
         val skipCachedLocation = bypassCachedLocationOnce
         bypassCachedLocationOnce = false
 
-        try {
-            val request = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, MIN_INTERVAL_MS)
-                .setMinUpdateIntervalMillis(MIN_FASTEST_INTERVAL_MS)
-                .setMaxUpdateDelayMillis(MAX_BATCH_DELAY_MS)
-                .setMinUpdateDistanceMeters(MIN_DISTANCE_M)
-                .setWaitForAccurateLocation(true)
-                .build()
-
-            if (!skipCachedLocation) {
-                fusedClient.lastLocation
-                    .addOnSuccessListener { location ->
-                        if (isRunning && location != null) updateSnapshot(location)
-                    }
-                    .addOnFailureListener { error -> Log.w(TAG, "Fused last location unavailable", error) }
+        fused.start(skipCachedLocation) { location ->
+            val current = currentSnapshot
+            if (current == null || !current.isValid ||
+                location.time >= current.fixTimeMs || location.accuracy < current.accuracy
+            ) {
+                updateSnapshot(location)
             }
-
-            fusedClient.requestLocationUpdates(request, fusedCallback, Looper.getMainLooper())
-                .addOnSuccessListener {
-                    if (isRunning) {
-                        fusedUpdatesRequested = true
-                    } else {
-                        fusedClient.removeLocationUpdates(fusedCallback)
-                    }
-                }
-                .addOnFailureListener { error -> Log.w(TAG, "Fused updates unavailable; using platform providers", error) }
-        } catch (e: Exception) {
-            Log.w(TAG, "Fused location unavailable; using platform providers", e)
         }
 
         val lastGps = if (skipCachedLocation) null else lastKnown(LocationManager.GPS_PROVIDER)
@@ -170,14 +153,7 @@ class LocationProvider(private val context: Context) {
     fun stop() {
         if (!isRunning) return
         isRunning = false
-        if (fusedUpdatesRequested) {
-            try {
-                fusedClient.removeLocationUpdates(fusedCallback)
-            } catch (e: Exception) {
-                Log.w(TAG, "Failed to stop fused location updates", e)
-            }
-            fusedUpdatesRequested = false
-        }
+        fused.stop()
         try {
             lm?.removeUpdates(gpsListener)
             lm?.removeUpdates(networkListener)
@@ -185,23 +161,43 @@ class LocationProvider(private val context: Context) {
         setStatus(Status.OFF)
     }
 
+    /**
+     * Last cached fix for a provider, or null if unavailable.
+     *
+     * [LocationManager.getLastKnownLocation] is only documented to throw
+     * [SecurityException], but it is also documented to throw
+     * [IllegalArgumentException] for an unknown provider, and some OEM ROMs throw
+     * further exceptions while the provider is still transitioning after the user
+     * flips the system location switch. A cached fix is only an optimisation, so
+     * every failure here is downgraded to "no cached fix" instead of being allowed
+     * to propagate and take the app down.
+     */
     @SuppressLint("MissingPermission")
     private fun lastKnown(provider: String): Location? = try {
         lm?.getLastKnownLocation(provider)
-    } catch (e: SecurityException) { null }
+    } catch (e: Exception) {
+        Log.w(TAG, "No cached fix available from $provider", e)
+        null
+    }
 
     private fun updateSnapshot(location: Location) {
-        val mock = location.isMock
-        val snap = GpsSnapshot(
-            latitude = location.latitude,
-            longitude = location.longitude,
-            altitude = if (location.hasAltitude()) location.altitude else null,
-            accuracy = location.accuracy,
-            bearing = if (location.hasBearing()) location.bearing else null,
-            speed = if (location.hasSpeed()) location.speed else null,
-            fixTimeMs = location.time,
-            isMock = mock
-        )
+        val snap = try {
+            val mock = location.isMock
+            GpsSnapshot(
+                latitude = location.latitude,
+                longitude = location.longitude,
+                altitude = if (location.hasAltitude()) location.altitude else null,
+                accuracy = location.accuracy,
+                bearing = if (location.hasBearing()) location.bearing else null,
+                speed = if (location.hasSpeed()) location.speed else null,
+                fixTimeMs = location.time,
+                isMock = mock
+            )
+        } catch (e: Exception) {
+            // A malformed Location from the platform must be ignored, not fatal.
+            Log.w(TAG, "Discarding an unreadable location fix", e)
+            return
+        }
         currentSnapshot = snap
         onLocationUpdated?.invoke(snap)
 

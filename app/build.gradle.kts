@@ -17,7 +17,7 @@ val hasReleaseKeystore = keystoreProperties.getProperty("storeFile") != null
 // Single source of truth. Bump these two together: the code MUST always increase
 // so existing installs accept the update, the name is what users read.
 val geoCamVersionName = "1.0"
-val geoCamVersionCode = 2
+val geoCamVersionCode = 3
 
 android {
     namespace = "dev.geocam.app"
@@ -31,6 +31,25 @@ android {
         // even though the user-facing name stays 1.0.
         versionCode = geoCamVersionCode
         versionName = geoCamVersionName
+    }
+
+    // Two shareable variants of the same app:
+    //  - google : fused location + Google map tiles (Play / general distribution)
+    //  - floss  : platform LocationManager + OpenStreetMap tiles, no proprietary
+    //             code at all, so it qualifies for the F-Droid main repository
+    flavorDimensions += "maps"
+    productFlavors {
+        create("google") {
+            dimension = "maps"
+            resValue("string", "app_name", "GeoCam")
+            resValue("bool", "supports_satellite", "true")
+        }
+        create("floss") {
+            dimension = "maps"
+            applicationIdSuffix = ".floss"
+            resValue("string", "app_name", "GeoCam FLOSS")
+            resValue("bool", "supports_satellite", "false")
+        }
     }
 
     signingConfigs {
@@ -89,26 +108,50 @@ dependencies {
     implementation(libs.androidx.exifinterface)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity)
-    implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
 }
 
-// Builds the signed release APK and drops it in the project root as
-// "GeoCam v<versionName>.apk" so there is never any doubt which file to upload.
-// Run with:  ./gradlew packageReleaseApk
-tasks.register("packageReleaseApk") {
-    group = "distribution"
-    description = "Assembles the signed release APK into the project root as GeoCam v$geoCamVersionName.apk"
-    dependsOn("assembleRelease")
-    val releaseApkDir = layout.buildDirectory.dir("outputs/apk/release")
-    val targetFile = rootProject.layout.projectDirectory.file("GeoCam v$geoCamVersionName.apk").asFile
-    doLast {
-        val dir = releaseApkDir.get().asFile
-        val source = dir.listFiles { f -> f.name.endsWith("-release.apk") }?.firstOrNull()
-        if (source == null) {
-            throw GradleException("No release APK found in $dir")
+// Play fused location is proprietary, so it is compiled into the google flavor only.
+// The floss flavor must not pull this in or F-Droid cannot build it.
+dependencies {
+    "googleImplementation"("com.google.android.gms:play-services-location:21.3.0")
+}
+
+// Builds a signed release APK and drops it in the project root, named after the
+// version, so there is never any doubt which file to upload.
+//
+//   ./gradlew packageReleaseApk    -> GeoCam v1.0.apk          (google flavor)
+//   ./gradlew packageFlossApk      -> GeoCam v1.0 FLOSS.apk    (floss flavor)
+fun registerPackageTask(
+    taskName: String,
+    assembleTask: String,
+    outputSubdir: String,
+    fileName: String,
+    description: String
+) {
+    tasks.register(taskName) {
+        group = "distribution"
+        this.description = description
+        dependsOn(assembleTask)
+        val srcDir = layout.buildDirectory.dir("outputs/apk/$outputSubdir")
+        val targetFile = rootProject.layout.projectDirectory.file(fileName).asFile
+        doLast {
+            val dir = srcDir.get().asFile
+            val built = dir.listFiles { f -> f.name.endsWith("-release.apk") }?.firstOrNull()
+                ?: throw GradleException("No release APK found in $dir")
+            built.copyTo(targetFile, overwrite = true)
+            logger.lifecycle("Signed release APK -> $targetFile")
         }
-        source.copyTo(targetFile, overwrite = true)
-        logger.lifecycle("Signed release APK -> $targetFile")
     }
 }
+
+registerPackageTask(
+    "packageReleaseApk", "assembleGoogleRelease", "google/release",
+    "GeoCam v$geoCamVersionName.apk",
+    "Signed Google-flavor APK -> project root as GeoCam v$geoCamVersionName.apk"
+)
+registerPackageTask(
+    "packageFlossApk", "assembleFlossRelease", "floss/release",
+    "GeoCam v$geoCamVersionName FLOSS.apk",
+    "Signed FLOSS-flavor APK -> project root as GeoCam v$geoCamVersionName FLOSS.apk"
+)
