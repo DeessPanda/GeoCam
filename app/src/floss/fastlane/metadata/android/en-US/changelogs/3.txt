@@ -1,0 +1,1 @@
+First release. GPS stamping, place names, mini-map overlay, gallery, and quarter-turn rotation snapping.

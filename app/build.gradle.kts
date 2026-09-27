@@ -17,7 +17,7 @@ val hasReleaseKeystore = keystoreProperties.getProperty("storeFile") != null
 // Single source of truth. Bump these two together: the code MUST always increase
 // so existing installs accept the update, the name is what users read.
 val geoCamVersionName = "1.0"
-val geoCamVersionCode = 3
+val geoCamVersionCode = 4
 
 android {
     namespace = "dev.geocam.app"

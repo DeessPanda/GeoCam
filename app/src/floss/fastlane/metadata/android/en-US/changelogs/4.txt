@@ -1,0 +1,1 @@
+Location no longer crashes the app when enabled on some Android 10 devices. Also uses the open street map in this build and snaps rotation only at quarter turns.

@@ -1,0 +1,34 @@
+GeoCam is an ad-free GPS map camera. It stamps your location, the place
+name, the date and time, a compass heading and a small mini-map directly
+onto each photo, so you always know where a shot was taken.
+
+This is the FLOSS build. It contains no proprietary libraries at all:
+location comes from Android's own built-in provider and the mini-map is
+drawn from OpenStreetMap, so it will install and run on devices without
+Google apps.
+
+Features:
+
+* Mini-map stamped onto every photo, in three sizes
+* Place name, coordinates, date, time, accuracy, altitude and heading
+* Location stamping can be turned off entirely, in which case no location
+  data is requested, drawn, or written into the image
+* Coordinates shown as decimal or DMS
+* Optional custom note, such as a survey point reference
+* Adjustable JPEG quality and maximum image size
+* Front (selfie) camera support, with flash and exposure controls
+* Built-in gallery for reviewing and deleting shots
+* One-tap force refresh of the current location
+* Works out of the box in portrait, and rotates only when the phone is
+  actually turned a quarter turn
+
+Privacy:
+
+No accounts. No ads. No analytics and no crash reporting. Photos are
+saved straight to your device's gallery. Location is only requested if
+you turn GPS stamping on, and you can also save a second clean copy with
+no location data written to it at all.
+
+A second build called "GeoCam" also exists, which uses Google Play
+Services for positioning and Google map tiles for the satellite view.
+That one is distributed separately and is not this listing.
