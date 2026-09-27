@@ -1,0 +1,38 @@
+# Gradle
+.gradle/
+build/
+!gradle/wrapper/gradle-wrapper.jar
+local.properties
+
+# Android build outputs
+*.apk
+*.aab
+*.ap_
+*.dex
+*.hprof
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Signing material (NEVER commit these)
+*.jks
+*.keystore
+keystore.properties
+*.pem
+*.p12
+*.key
+
+# Kotlin
+.kotlin/
+
+# IDE
+.idea/
+*.iml
+*.ipr
+*.iws
+.vscode/
+
+# OS junk
+.DS_Store
+Thumbs.db
+desktop.ini

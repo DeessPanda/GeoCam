@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#000000">
+
+    <dev.geocam.app.ui.FocusGestureFrameLayout
+        android:id="@+id/previewContainer"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@id/bottomBar"
+        app:layout_constraintTop_toBottomOf="@id/topBar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <androidx.camera.view.PreviewView
+            android:id="@+id/previewView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+        
+        <dev.geocam.app.ui.LivePreviewOverlay
+            android:id="@+id/overlayPreview"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="8dp" />
+
+        <dev.geocam.app.ui.FocusIndicatorView
+            android:id="@+id/focusIndicator"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="9dp"
+            android:visibility="invisible" />
+
+        <dev.geocam.app.ui.RuleOfThirdsView
+            android:id="@+id/ruleOfThirds"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:elevation="7dp" />
+
+        <dev.geocam.app.ui.ExposureControlView
+            android:id="@+id/exposureControl"
+            android:layout_width="56dp"
+            android:layout_height="220dp"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginEnd="4dp"
+            android:background="#66000000"
+            android:contentDescription="Exposure compensation" />
+
+    </dev.geocam.app.ui.FocusGestureFrameLayout>
+
+    <!-- Top Bar Controls -->
+    <LinearLayout
+        android:id="@+id/topBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#88000000"
+        android:orientation="horizontal"
+        android:paddingTop="32dp"
+        android:paddingBottom="8dp"
+        android:paddingStart="8dp"
+        android:paddingEnd="8dp"
+        android:elevation="2dp"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/settingsButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_settings"
+            android:tint="#FFFFFF"
+            android:padding="12dp"
+            android:scaleType="fitCenter" />
+
+        <ImageButton
+            android:id="@+id/reloadLocationButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_location_reload"
+            android:tint="#FFFFFF"
+            android:padding="12dp"
+            android:contentDescription="@string/reload_location" />
+            
+        <Space
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1" />
+
+        <ImageButton
+            android:id="@+id/mapZoomButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_map_zoom"
+            android:tint="#FFFFFF"
+            android:padding="12dp"
+            android:contentDescription="@string/map_zoom_level" />
+            
+        <ImageButton
+            android:id="@+id/flashButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_flash_auto" 
+            android:tint="#FFFFFF"
+            android:padding="12dp"
+            android:scaleType="fitCenter" />
+    </LinearLayout>
+
+    <!-- Bottom Controls Area -->
+    <LinearLayout
+        android:id="@+id/bottomBar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#88000000"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:paddingTop="16dp"
+        android:paddingBottom="36dp"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:elevation="2dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <!-- Flip Camera -->
+        <ImageButton
+            android:id="@+id/flipButton"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginEnd="32dp"
+            android:background="?selectableItemBackgroundBorderless"
+            android:src="@drawable/ic_flip_camera"
+            android:tint="#FFFFFF"
+            android:padding="8dp"
+            android:layout_weight="1"
+            android:scaleType="fitCenter" />
+
+        <!-- Capture Button -->
+        <ImageButton
+            android:id="@+id/captureButton"
+            android:layout_width="84dp"
+            android:layout_height="84dp"
+            android:background="@drawable/bg_circle_white"
+            android:src="@drawable/ic_camera"
+            android:padding="20dp"
+            android:scaleType="fitCenter" />
+
+        <!-- Gallery Button -->
+        <FrameLayout
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_marginStart="32dp"
+            android:layout_weight="1">
+            <com.google.android.material.imageview.ShapeableImageView
+                android:id="@+id/galleryButton"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                android:layout_gravity="center"
+                android:background="#33000000"
+                app:shapeAppearanceOverlay="@style/CircleImageView"
+                android:scaleType="centerCrop"
+                android:foreground="?selectableItemBackgroundBorderless" />
+        </FrameLayout>
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/captureDimOverlay"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="#FF000000"
+        android:importantForAccessibility="no"
+        android:visibility="gone"
+        android:elevation="12dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <FrameLayout
+        android:id="@+id/introScreen"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#10191C"
+        android:clickable="true"
+        android:focusable="true"
+        android:elevation="30dp">
+
+        <dev.geocam.app.ui.IntroMotionView
+            android:id="@+id/introMotion"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <LinearLayout
+            android:id="@+id/introBrand"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:orientation="vertical">
+
+            <ImageView
+                android:layout_width="88dp"
+                android:layout_height="88dp"
+                android:src="@drawable/ic_geocam_intro"
+                android:contentDescription="GeoCam logo" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:fontFamily="sans-serif-black"
+                android:text="@string/app_name"
+                android:textColor="#FFFFFF"
+                android:textSize="48sp"
+                android:includeFontPadding="false" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/introCredit"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|bottom"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:alpha="0.58"
+            android:padding="16dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/intro_made_by"
+                android:textColor="#FFFFFF"
+                android:textSize="13sp" />
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_marginStart="6dp"
+                android:src="@drawable/ic_github"
+                android:contentDescription="GitHub" />
+        </LinearLayout>
+    </FrameLayout>
+
+</androidx.constraintlayout.widget.ConstraintLayout>

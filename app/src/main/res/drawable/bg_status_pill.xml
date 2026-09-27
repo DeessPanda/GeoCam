@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Translucent pill behind the GPS status text so it stays legible over any
+     camera scene. (TextView shadow attributes were the obvious alternative, but
+     android:textShadow* is not part of the public framework attr table.) -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#99000000" />
+    <corners android:radius="12dp" />
+</shape>

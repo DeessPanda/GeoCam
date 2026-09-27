@@ -1,0 +1,201 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/settingsScroll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fillViewport="true"
+    android:clipToPadding="true">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/TextAppearance.Material3.TitleLarge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingBottom="4dp"
+            android:text="@string/settings_title" />
+
+        <!-- ── Location ─────────────────────────────────────────────── -->
+        <TextView
+            style="@style/TextAppearance.Material3.TitleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingBottom="4dp"
+            android:text="@string/settings_section_location" />
+
+        <CheckBox
+            android:id="@+id/gpsEnabled"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_gps_enabled" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:paddingBottom="8dp"
+            android:text="@string/settings_gps_enabled_hint"
+            android:textSize="12sp" />
+
+        <!-- ── Overlay contents ─────────────────────────────────────── -->
+        <TextView
+            style="@style/TextAppearance.Material3.TitleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:paddingBottom="4dp"
+            android:text="@string/settings_section_overlay" />
+
+        <CheckBox
+            android:id="@+id/showPlaceName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_show_place_name" />
+
+        <CheckBox
+            android:id="@+id/showCoordinates"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_show_coordinates" />
+
+        <CheckBox
+            android:id="@+id/showDateTime"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_show_datetime" />
+
+        <CheckBox
+            android:id="@+id/showAccuracy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_show_accuracy" />
+
+        <CheckBox
+            android:id="@+id/showAltitude"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_show_altitude" />
+
+        <CheckBox
+            android:id="@+id/showHeading"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_show_heading" />
+
+        <CheckBox
+            android:id="@+id/miniMap"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_mini_map" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:alpha="0.7"
+            android:paddingBottom="8dp"
+            android:text="@string/settings_mini_map_hint"
+            android:textSize="12sp" />
+
+        <!-- ── Coordinate format ─────────────────────────────────────── -->
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="8dp"
+            android:text="@string/settings_coord_format" />
+
+        <RadioGroup
+            android:id="@+id/coordFormat"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <RadioButton
+                android:id="@+id/coordDecimal"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_coord_decimal" />
+
+            <RadioButton
+                android:id="@+id/coordDms"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/settings_coord_dms" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:text="@string/settings_custom_note" />
+
+        <EditText
+            android:id="@+id/customNote"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/settings_custom_note_hint"
+            android:importantForAutofill="no"
+            android:inputType="textCapSentences"
+            android:maxLines="2" />
+
+        <!-- ── Image quality ─────────────────────────────────────────── -->
+        <TextView
+            style="@style/TextAppearance.Material3.TitleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingBottom="4dp"
+            android:text="@string/settings_section_quality" />
+
+        <TextView
+            android:id="@+id/jpegQualityLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_jpeg_quality" />
+
+        <SeekBar
+            android:id="@+id/jpegQuality"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="100" />
+
+        <TextView
+            android:id="@+id/maxLongEdgeLabel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="12dp"
+            android:text="@string/settings_max_long_edge" />
+
+        <SeekBar
+            android:id="@+id/maxLongEdge"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:max="24" />
+
+        <!-- ── Privacy ───────────────────────────────────────────────── -->
+        <TextView
+            style="@style/TextAppearance.Material3.TitleSmall"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="20dp"
+            android:paddingBottom="4dp"
+            android:text="@string/settings_section_privacy" />
+
+        <CheckBox
+            android:id="@+id/saveCleanCopy"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_save_clean_copy" />
+
+        <CheckBox
+            android:id="@+id/saveWithoutLocation"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_save_without_location" />
+
+    </LinearLayout>
+</ScrollView>

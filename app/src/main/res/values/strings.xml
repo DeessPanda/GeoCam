@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GeoCam</string>
+    <string name="status_gps_off">GPS: OFF</string>
+    <string name="status_gps_searching">GPS: SEARCHING</string>
+    <string name="status_gps_locked">GPS: LOCKED</string>
+    <string name="status_camera_denied">Camera permission denied</string>
+
+    <string name="settings_title">Settings</string>
+    <string name="photo_unavailable">Photo is unavailable</string>
+    <string name="photo_details">Photo details</string>
+    <string name="share_photo">Share photo</string>
+    <string name="photo_info_filename">File: %1$s</string>
+    <string name="photo_info_captured">Captured: %1$s</string>
+    <string name="photo_info_location">Location: %1$s</string>
+    <string name="photo_info_unknown">Unknown</string>
+    <string name="photo_info_not_recorded">Not recorded</string>
+    <string name="intro_made_by">Made by DeessPanda</string>
+    <string name="flash_unavailable">Flash is unavailable on this camera</string>
+    <string name="flash_on">Flash enabled</string>
+    <string name="flash_off">Flash disabled</string>
+    <string name="capture_failed">Could not take photo. Please try again.</string>
+    <string name="capture_processing_busy">Photos are still processing. Try again in a moment.</string>
+    <string name="delete_photo">Delete</string>
+    <string name="delete_photo_title">Delete photo?</string>
+    <string name="delete_photo_confirmation">This photo will be permanently removed.</string>
+    <string name="photo_deleted">Photo deleted</string>
+    <string name="photo_delete_failed">Could not delete photo</string>
+    <string name="reload_location">Refresh location</string>
+    <string name="location_refreshing">Refreshing location</string>
+    <string name="settings_gps_disabled">Enable location stamping in Settings first</string>
+    <string name="map_zoom_level">Mini-map zoom level %1$d of 3</string>
+
+    <string name="settings_section_location">Location</string>
+    <string name="settings_gps_enabled">Stamp GPS data on photos</string>
+    <string name="settings_gps_enabled_hint">When off, no location data is requested, drawn or written to EXIF.</string>
+
+    <string name="settings_section_overlay">Overlay contents</string>
+    <string name="settings_show_place_name">Place name</string>
+    <string name="settings_show_coordinates">Coordinates</string>
+    <string name="settings_show_datetime">Date and time</string>
+    <string name="settings_show_accuracy">Accuracy</string>
+    <string name="settings_show_altitude">Altitude</string>
+    <string name="settings_show_heading">Compass heading</string>
+    <string name="settings_mini_map">Mini-map</string>
+    <string name="settings_mini_map_hint">Fetches one OpenStreetMap tile per photo. Needs a network connection.</string>
+
+    <string name="settings_coord_format">Coordinate format</string>
+    <string name="settings_coord_decimal">Decimal</string>
+    <string name="settings_coord_dms">DMS</string>
+
+    <string name="settings_custom_note">Custom note</string>
+    <string name="settings_custom_note_hint">e.g. survey point 4</string>
+
+    <string name="settings_section_quality">Image quality</string>
+    <string name="settings_jpeg_quality">JPEG quality</string>
+    <string name="settings_max_long_edge">Maximum long edge</string>
+    <string name="settings_full_resolution">Full resolution</string>
+
+    <string name="settings_section_privacy">Privacy</string>
+    <string name="settings_save_clean_copy">Also save a clean copy</string>
+    <string name="settings_save_without_location">Save without location</string>
+
+    <color name="card_bg">#E6000000</color>
+</resources>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Adaptive-icon foreground. The 108dp canvas is mostly bleed area: the icon is
+    scaled to ~66dp and centred so nothing important lands in the mask corners.
+    The pin hole is a second path painted in the background colour rather than
+    relying on winding order, which keeps it open at every launcher size.
+-->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+
+    <group
+        android:scaleX="2.75"
+        android:scaleY="2.75"
+        android:translateX="21"
+        android:translateY="21">
+
+        <!-- Map pin -->
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M12,2C8.13,2 5,5.13 5,9c0,5.25 7,13 7,13s7,-7.75 7,-13C19,5.13 15.87,2 12,2z" />
+
+        <!-- Pin hole, filled with the launcher background colour -->
+        <path
+            android:fillColor="#1C1B1F"
+            android:pathData="M12,7.5c-1.38,0 -2.5,1.12 -2.5,2.5s1.12,2.5 2.5,2.5s2.5,-1.12 2.5,-2.5S13.38,7.5 12,7.5z" />
+    </group>
+</vector>
