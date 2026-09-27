@@ -14,6 +14,11 @@ val keystoreProperties = Properties().apply {
 }
 val hasReleaseKeystore = keystoreProperties.getProperty("storeFile") != null
 
+// Single source of truth. Bump these two together: the code MUST always increase
+// so existing installs accept the update, the name is what users read.
+val geoCamVersionName = "1.0"
+val geoCamVersionCode = 2
+
 android {
     namespace = "dev.geocam.app"
     compileSdk = 35
@@ -24,8 +29,8 @@ android {
         targetSdk = 35
         // versionCode MUST increase for existing installs to accept the update,
         // even though the user-facing name stays 1.0.
-        versionCode = 2
-        versionName = "1.0"
+        versionCode = geoCamVersionCode
+        versionName = geoCamVersionName
     }
 
     signingConfigs {
@@ -86,4 +91,24 @@ dependencies {
     implementation(libs.androidx.activity)
     implementation("com.google.android.gms:play-services-location:21.3.0")
     implementation("com.github.bumptech.glide:glide:4.16.0")
+}
+
+// Builds the signed release APK and drops it in the project root as
+// "GeoCam v<versionName>.apk" so there is never any doubt which file to upload.
+// Run with:  ./gradlew packageReleaseApk
+tasks.register("packageReleaseApk") {
+    group = "distribution"
+    description = "Assembles the signed release APK into the project root as GeoCam v$geoCamVersionName.apk"
+    dependsOn("assembleRelease")
+    val releaseApkDir = layout.buildDirectory.dir("outputs/apk/release")
+    val targetFile = rootProject.layout.projectDirectory.file("GeoCam v$geoCamVersionName.apk").asFile
+    doLast {
+        val dir = releaseApkDir.get().asFile
+        val source = dir.listFiles { f -> f.name.endsWith("-release.apk") }?.firstOrNull()
+        if (source == null) {
+            throw GradleException("No release APK found in $dir")
+        }
+        source.copyTo(targetFile, overwrite = true)
+        logger.lifecycle("Signed release APK -> $targetFile")
+    }
 }
