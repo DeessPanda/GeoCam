@@ -22,7 +22,9 @@ android {
         applicationId = "dev.geocam.app"
         minSdk = 29
         targetSdk = 35
-        versionCode = 1
+        // versionCode MUST increase for existing installs to accept the update,
+        // even though the user-facing name stays 1.0.
+        versionCode = 2
         versionName = "1.0"
     }
 

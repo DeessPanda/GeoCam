@@ -43,7 +43,7 @@
     <string name="settings_show_altitude">Altitude</string>
     <string name="settings_show_heading">Compass heading</string>
     <string name="settings_mini_map">Mini-map</string>
-    <string name="settings_mini_map_hint">Fetches one OpenStreetMap tile per photo. Needs a network connection.</string>
+    <string name="settings_mini_map_hint">Fetches one map tile per photo from Google Maps. Needs a network connection.</string>
 
     <string name="settings_coord_format">Coordinate format</string>
     <string name="settings_coord_decimal">Decimal</string>

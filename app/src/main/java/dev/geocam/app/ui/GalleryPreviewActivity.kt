@@ -6,12 +6,17 @@ import android.content.ClipData
 import android.content.ContentUris
 import android.content.Intent
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AlertDialog
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowCompat
+import androidx.core.view.WindowInsetsCompat
+import androidx.core.view.updateLayoutParams
 import com.bumptech.glide.Glide
 import dev.geocam.app.R
 import androidx.exifinterface.media.ExifInterface
@@ -31,7 +36,28 @@ class GalleryPreviewActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        WindowCompat.setDecorFitsSystemWindows(window, false)
         setContentView(R.layout.activity_gallery_preview)
+
+        // The photo itself stays full-bleed, but the action buttons must clear the
+        // system navigation bar (3-button nav overlaps them, gesture nav does not).
+        val navBarViews = listOf(
+            findViewById<View>(R.id.infoButton),
+            findViewById<View>(R.id.deleteButton),
+            findViewById<View>(R.id.shareButton)
+        )
+        val baseBottomMargins = navBarViews.map { view ->
+            (view.layoutParams as ViewGroup.MarginLayoutParams).bottomMargin
+        }
+        ViewCompat.setOnApplyWindowInsetsListener(findViewById(android.R.id.content)) { _, insets ->
+            val bars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            navBarViews.forEachIndexed { index, view ->
+                view.updateLayoutParams<ViewGroup.MarginLayoutParams> {
+                    bottomMargin = baseBottomMargins[index] + bars.bottom
+                }
+            }
+            insets
+        }
 
         val requestedPhotoUri = intent.getStringExtra("photo_uri")?.let {
             runCatching { Uri.parse(it) }.getOrNull()
