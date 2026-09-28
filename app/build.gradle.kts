@@ -147,11 +147,11 @@ fun registerPackageTask(
 
 registerPackageTask(
     "packageReleaseApk", "assembleGoogleRelease", "google/release",
-    "GeoCam v$geoCamVersionName.apk",
-    "Signed Google-flavor APK -> project root as GeoCam v$geoCamVersionName.apk"
+    "GeoCam.$geoCamVersionName.apk",
+    "Signed Google-flavor APK -> project root as GeoCam.$geoCamVersionName.apk"
 )
 registerPackageTask(
     "packageFlossApk", "assembleFlossRelease", "floss/release",
-    "GeoCam v$geoCamVersionName FLOSS.apk",
-    "Signed FLOSS-flavor APK -> project root as GeoCam v$geoCamVersionName FLOSS.apk"
+    "GeoCam.$geoCamVersionName.FLOSS.apk",
+    "Signed FLOSS-flavor APK -> project root as GeoCam.$geoCamVersionName.FLOSS.apk"
 )
