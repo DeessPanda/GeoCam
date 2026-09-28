@@ -5,6 +5,7 @@ import android.content.Context
 import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
+import android.os.Build
 import android.os.Bundle
 import android.os.Looper
 import android.util.Log
@@ -182,7 +183,7 @@ class LocationProvider(private val context: Context) {
 
     private fun updateSnapshot(location: Location) {
         val snap = try {
-            val mock = location.isMock
+            val mock = isMockLocation(location)
             GpsSnapshot(
                 latitude = location.latitude,
                 longitude = location.longitude,
@@ -193,9 +194,11 @@ class LocationProvider(private val context: Context) {
                 fixTimeMs = location.time,
                 isMock = mock
             )
-        } catch (e: Exception) {
-            // A malformed Location from the platform must be ignored, not fatal.
-            Log.w(TAG, "Discarding an unreadable location fix", e)
+        } catch (t: Throwable) {
+            // Deliberately Throwable, not Exception. Reaching for an API the running
+            // platform does not have raises NoSuchMethodError, which is an Error and
+            // would slip past a catch of Exception and kill the app.
+            Log.w(TAG, "Discarding an unreadable location fix", t)
             return
         }
         currentSnapshot = snap
@@ -203,6 +206,22 @@ class LocationProvider(private val context: Context) {
 
         setStatus(if (snap.isValid) Status.LOCKED else Status.SEARCHING)
     }
+
+    /**
+     * Whether a fix came from a mock location provider.
+     *
+     * [Location.isMock] only exists from API 31. It replaced [Location.isFromMockProvider],
+     * which is deprecated but still present and required on Android 10 to 11, so the
+     * older call has to be kept for those versions or the app dies with a
+     * NoSuchMethodError the moment the first fix arrives.
+     */
+    private fun isMockLocation(location: Location): Boolean =
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
+            location.isMock
+        } else {
+            @Suppress("DEPRECATION")
+            location.isFromMockProvider
+        }
 
     private fun setStatus(s: Status) {
         if (status != s) {

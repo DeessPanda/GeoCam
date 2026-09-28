@@ -38,7 +38,7 @@
         android:layout_margin="16dp"
         android:background="?selectableItemBackgroundBorderless"
         android:src="@drawable/ic_info"
-        android:tint="#FFFFFF"
+        app:tint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -50,7 +50,7 @@
         android:background="?selectableItemBackgroundBorderless"
         android:contentDescription="@string/delete_photo"
         android:src="@drawable/ic_delete"
-        android:tint="#FFFFFF"
+        app:tint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/infoButton"
         app:layout_constraintEnd_toStartOf="@id/shareButton" />
@@ -63,7 +63,7 @@
         android:layout_margin="16dp"
         android:background="?selectableItemBackgroundBorderless"
         android:src="@drawable/ic_share"
-        android:tint="#FFFFFF"
+        app:tint="#FFFFFF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 

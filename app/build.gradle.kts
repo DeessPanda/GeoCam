@@ -42,13 +42,11 @@ android {
         create("google") {
             dimension = "maps"
             resValue("string", "app_name", "GeoCam")
-            resValue("bool", "supports_satellite", "true")
         }
         create("floss") {
             dimension = "maps"
             applicationIdSuffix = ".floss"
             resValue("string", "app_name", "GeoCam FLOSS")
-            resValue("bool", "supports_satellite", "false")
         }
     }
 

@@ -71,7 +71,7 @@
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_settings"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:padding="12dp"
             android:scaleType="fitCenter" />
 
@@ -81,7 +81,7 @@
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_location_reload"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:padding="12dp"
             android:contentDescription="@string/reload_location" />
             
@@ -96,7 +96,7 @@
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_map_zoom"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:padding="12dp"
             android:contentDescription="@string/map_zoom_level" />
             
@@ -107,7 +107,7 @@
             android:layout_height="48dp"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_flash_auto" 
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:padding="12dp"
             android:scaleType="fitCenter" />
     </LinearLayout>
@@ -136,7 +136,7 @@
             android:layout_marginEnd="32dp"
             android:background="?selectableItemBackgroundBorderless"
             android:src="@drawable/ic_flip_camera"
-            android:tint="#FFFFFF"
+            app:tint="#FFFFFF"
             android:padding="8dp"
             android:layout_weight="1"
             android:scaleType="fitCenter" />

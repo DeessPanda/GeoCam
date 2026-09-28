@@ -1,9 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="status_gps_off">GPS: OFF</string>
-    <string name="status_gps_searching">GPS: SEARCHING</string>
-    <string name="status_gps_locked">GPS: LOCKED</string>
-    <string name="status_camera_denied">Camera permission denied</string>
 
     <string name="settings_title">Settings</string>
     <string name="photo_unavailable">Photo is unavailable</string>
@@ -67,5 +63,4 @@
     <string name="settings_save_clean_copy">Also save a clean copy</string>
     <string name="settings_save_without_location">Save without location</string>
 
-    <color name="card_bg">#E6000000</color>
 </resources>
