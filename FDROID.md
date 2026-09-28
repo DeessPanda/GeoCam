@@ -86,13 +86,30 @@ F-Droid reads the app name, summary, description and changelog from the
 Fastlane metadata already committed in this repo:
 
 ```
-app/src/floss/fastlane/metadata/android/en-US/
+fastlane/metadata/android/en-US/
 ├── title.txt
 ├── short_description.txt
 ├── full_description.txt
 └── changelogs/
+    ├── 3.txt
+    └── 4.txt
 ```
 
-The path is the per-flavour layout F-Droid looks for. To change what the
-listing says, edit those files and open a follow-up merge request — no code
-change needed.
+F-Droid also supports a per-flavour location at `src/<flavour>/fastlane/`,
+which is worth knowing about since this project has two flavours. For a
+single-variant submission the top-level path above is the documented
+default, so that is what this repo uses.
+
+To change what the listing says, edit those files and open a follow-up merge
+request. No code change and no rebuild needed.
+
+## Still missing before inclusion
+
+The checklist asks for "text files **and pictures**". This repo has the text
+files. The pictures are not committed yet:
+
+- **App icon** — F-Droid will fall back to the icon inside the built APK, so
+  this one is optional, but supplying it avoids surprises with adaptive icons.
+- **Screenshots** — not required for inclusion, but the listing is much better
+  with them. Drop PNGs in `fastlane/metadata/android/en-US/images/` and name
+  them `phoneScreenshots/1.png`, `2.png`, and so on.
