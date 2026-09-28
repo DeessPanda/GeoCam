@@ -37,7 +37,7 @@ There are two builds of GeoCam, made from the same code. They install side by si
 
 **Pick GeoCam if** you want the best possible satellite imagery and slightly faster position fixes, and you have a normal phone with Google apps.
 
-**Pick GeoCam FLOSS if** you care about not depending on Google, use a de-Gooed ROM, or want something installable from F-Droid.
+**Pick GeoCam FLOSS if** you care about not depending on Google, use a de-Googled ROM, or want something installable from F-Droid (Release Pending).
 
 #### GeoCam — pros and cons
 
